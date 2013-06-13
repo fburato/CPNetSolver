@@ -1,0 +1,95 @@
+simone:parser,vincoli,domini
+francesco:ordini,risolutore
+
+class Dominio (val varName, valoriOk:Set[String]) {
+//da usare quando si traduce da cp-net a csp
+addVincolo(v:Vincolo)
+}
+
+object Dominio {
+val domini: Map[String,Dominio]
+def addDominio(d: Dominio) = domini.add(d.varName,d)
+def apply(valName:String): Option[Dominio] = {
+  domini.get(valName)
+}
+}
+//quando si crea un dominio occorre aggiungerlo alla lista di tutti i domini
+//con addDominio
+
+
+class Vincolo(val variables: Array[String]) {
+  //variables rappresenta i nomi della variabili
+  //da variables occorre capire in che posizione
+  //saranno i valori
+      variables       A		B	C 	D
+      lista di valori 1 	3 	4 	5
+      lista di valori 3 	6 	7 	1
+		      pos1	pos2	pos3	pos4
+
+  val dimension = variables.length
+  val list = List[Array[String]]
+  def insert = list add t //controllare dimensione
+
+  // ritorna valori accettati per varName
+  def proiezione(varName: String): List[String]
+
+  // restituisce un nuovo insieme di vincoli
+  // dove sono stati rimossi tutti i vincoli che avevano
+  // varName!=value
+  def riduzione(varName: String, value: String): Vincolo
+
+}
+
+
+object Ordini {
+val listaOrdini: Map[String,Ordini]
+def addOrdini(o: Ordini) = listaOrdini.add(o.varName,o)
+def apply(valName:String): Option[Ordini] = {
+  listaOrdini.get(valName)
+}
+
+
+//quando si crea un dominio occorre aggiungerlo alla lista di tutti i domini
+//con addDominio
+class Ordini(varName:String, dependencies:List[String]) {
+
+add(
+    assegnamento: List[String]
+    ordine      : Map[String,Int]
+   )
+//controlla che assegnamento.size sia uguale a dependencies.size
+//controlla che ogni valore assegnamento(i) sia nel dominio variabile dependencies(i)
+//controlla che l'ordine sia completo (le chiavi di ordine devono essere tutti e soli gli elementi del dominio di varName
+
+//struttura dati 
+Map[
+     List[String],    // assegnamento (valori ordinati come dependencies)
+     Map[String,Int]  // ordine (a>b>c significa   a=>2 b=>1 c=>0)
+   ]
+
+def getConstraints(): Vincolo   //formati da "assegnamento => migliorValore"
+def getComparator(): Comparator
+def getDependencies(): List[String] //per costruire gui cp-net
+def getVarName():String
+}
+
+
+
+
+class Comparator {
+//ritorna se ho tutto quello che mi serve nel contesto
+//aggiunge al contesto varName=value
+put(varName: Str, value: Str):Boolean
+isMinor(value1:Str, value2:Str):Boolean
+
+/*
+esempio
+ho                    !x  y  z
+faccio flip di y      !x !y  z
+
+c=ordineDi_y.getComparator
+c.put("X","!x")
+c.put("Z","z")
+c.isMinor("!y","y")
+*/
+}
