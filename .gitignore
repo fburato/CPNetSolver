@@ -1,5 +1,8 @@
 *.class
 *.log
+CPNetSolver/.classpath
+CPNetSolver/.project
+CPNetSolver/.settings
 
 # sbt specific
 dist/*
