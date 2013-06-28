@@ -3,6 +3,7 @@
 CPNetSolver/.classpath
 CPNetSolver/.project
 CPNetSolver/.settings
+CPNetSolver/.cache
 
 # sbt specific
 dist/*
