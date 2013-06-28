@@ -11,7 +11,8 @@ package constraintobjs
  * @author Francesco Burato
  *
  */
-trait Vincolo {
+//TODO sostituire con Vincolo quando è realizzata la classe
+trait TVincolo {
   /**
    * Inserimento di una tupla al vincolo.
    */
@@ -26,5 +27,5 @@ trait Vincolo {
    * Costruizione di un nuovo vincolo in cui la variabile varName assume come unico
    * valore value
    */
-  def riduzione(varName : String, value : String) : Vincolo
+  def riduzione(varName : String, value : String) : TVincolo
 }
