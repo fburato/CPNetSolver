@@ -41,9 +41,9 @@ class Ordini(val varName: String, val dependencies: Vector[String]) {
         //TODO controllo di appartenenza di value al dominio di variable
         buffer(index) = value
         setted += 1
-        if (setted == buffer.length) {
+        if (setted == buffer.length)
           findOrder()
-        } else
+        else
           false
       }
     }
@@ -86,7 +86,7 @@ class Ordini(val varName: String, val dependencies: Vector[String]) {
     }
   }
 
-  private val root = new ContainerOrdine(NilOrdine)
+  private val root = new InternoOrdine(NilOrdine)
   init()
   // inizializzatore dell'albero degli ordini
   private def init() {
@@ -135,9 +135,10 @@ class Ordini(val varName: String, val dependencies: Vector[String]) {
         // cerco il figlio con il valore dell'assegnamento
         val next = findNode(assign(i), end.getSons)
         error = next match {
-          case Some(x) => if (x.leaves >= 1)
-            true
-          else { end = x; i += 1; false }
+          case Some(x) => 
+            if (x.leaves >= 1)
+              true
+            else { end = x; i += 1; false }
           // se non viene trovato allora segnalo lerrore
           case None => true
         }

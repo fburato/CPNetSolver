@@ -29,16 +29,20 @@ case object NilOrdine extends AlberoOrdini {
  * dell'albero fino al nodo corrente
  */
 case class LeafOrdine(val parent: AlberoOrdini, val order: Map[String, Int]) extends AlberoOrdini {
+  parent += this
   def getSons = NilOrdine :: Nil
   def leaves_=(i: Int) {}
   def leaves = 0
   def +=(newson: AlberoOrdini) {}
 }
+
 /**
- * Nodo interno generico: potrebbe essere un nodo associato ad una variabile oppure 
- * una radice
+ * Nodo interno contenente possibilmente una stringa informativa
  */
-case class ContainerOrdine(val parent: AlberoOrdini) extends AlberoOrdini {
+case class InternoOrdine(val parent: AlberoOrdini, val varValue: String) extends AlberoOrdini{
+  // aggiunge automaticamente al nodo segnalato come padre il nodo corrente
+  parent += this
+  def this(p : AlberoOrdini) = this(p,null)
   private val mySons: Stack[AlberoOrdini] = Stack()
   private var myLeaf = 0
   /**
@@ -64,7 +68,7 @@ case class ContainerOrdine(val parent: AlberoOrdini) extends AlberoOrdini {
       case NilOrdine =>
       case x =>
         x.leaves = x.leaves + 1
-        update(parent)
+        update(node.parent)
     }
     newson match {
       // aggiorna solo se il nodo aggiunto è di tipo foglia
@@ -78,12 +82,5 @@ case class ContainerOrdine(val parent: AlberoOrdini) extends AlberoOrdini {
   }
 
   def leaves = myLeaf
-}
-case class InternoOrdine(val parent: AlberoOrdini, val varValue: String) extends AlberoOrdini{
-  private val containerOrdine = new ContainerOrdine(parent)
-  def getSons: List[AlberoOrdini] = containerOrdine.getSons
-  def +=(newson: AlberoOrdini) = containerOrdine += newson
-  def leaves_=(i: Int) = containerOrdine.leaves = i
-  def leaves = containerOrdine.leaves
 }
 
