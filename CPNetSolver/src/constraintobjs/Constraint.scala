@@ -1,13 +1,17 @@
 /**
- * File: Comparator.scala
+ * File: Constraint.scala
  * Package: constraintobjs
- * Autore: Simone Carriero
- * Creazione: 28/06/2013
+ * Author: Simone Carriero
+ * Creation: 28/06/2013
  */
 package constraintobjs
 
 import scala.collection.mutable.{Buffer, ListBuffer}
 
+/**
+ * Represents a constraint.
+ * @author Simone Carriero
+ */
 class Constraint(val vars:     Array[String],
                  val accepted: Buffer[Array[String]]) {
 
