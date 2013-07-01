@@ -17,9 +17,9 @@ object Domain {
   
   val domains: mutable.HashMap[String, Domain] = new mutable.HashMap[String, Domain]
 
-  def addDomain(variable: String, domain: Domain) {
-    domains get variable match {
-      case None => domains += (variable -> domain)
+  def addDomain(domain: Domain) {
+    domains get domain.variable match {
+      case None => domains += (domain.variable -> domain)
       case _ =>
     }
   }
