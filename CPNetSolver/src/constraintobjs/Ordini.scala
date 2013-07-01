@@ -6,7 +6,6 @@
  */
 package constraintobjs
 
-import scala.collection.mutable.Set
 import scala.collection.mutable.HashMap
 object Ordini {
   val listaOrdini: HashMap[String, Ordini] = new HashMap[String, Ordini]
@@ -32,18 +31,31 @@ class Ordini(val varName: String, val dependencies: Vector[String]) {
     val buffer: Array[String] = new Array[String](dependencies.length)
     var setted = 0
     var order: Map[String, Int] = null
+    if(dependencies.length == 0) {
+      //la variabile è indipendente: carico l'ordine unico
+      findOrder()
+    }
     def put(variable: String, value: String): Boolean = {
+      // in caso di inizializzazione già eseguita ritorna immediatamente true
+      if(order != null)
+        return true
       val index = dependencies.indexOf(variable) // trovo l'indice della variabile
       if (index < 0 || index >= dependencies.length)
         false
       else {
         // indice trovato
-        //TODO controllo di appartenenza di value al dominio di variable
-        buffer(index) = value
-        setted += 1
-        if (setted == buffer.length)
-          findOrder()
-        else
+        val accepted = Domain(dependencies(index)) match {
+          case Some(x) => x.accepted
+          case None => throw new Exception("An order can only be built on a registered variable")
+        }
+        if (accepted contains value) {
+          buffer(index) = value
+          setted += 1
+          if (setted == buffer.length)
+            findOrder()
+          else
+            false
+        } else
           false
       }
     }
@@ -71,7 +83,7 @@ class Ordini(val varName: String, val dependencies: Vector[String]) {
     }
     // Se l'ordine è stato impostato allora restituisco il valore corretto, altrimenti None
     def isMinor(value1: String, value2: String): Option[Boolean] =
-      if (order != null) {
+      if (order == null) {
         None
       } else {
         Some(order(value1) <= order(value2))
@@ -93,13 +105,16 @@ class Ordini(val varName: String, val dependencies: Vector[String]) {
     /*
      * Costruisce la struttura ad albero completa senza le foglie
      */
+    if (dependencies contains varName)
+      throw new Exception("A variable should not depend on itself")
     def initNode(node: AlberoOrdini, i: Int, dep: Vector[String]): Unit =
       if (i < dep.length) {
-        //TODO completare con i domini corretti
-        val s: Set[String] = Set()
+        val s: Set[String] = Domain(dep(i)) match {
+          case Some(x) => x.accepted
+          case None => throw new Exception("A registered variable should be passed")
+        }
         for (elem <- s) {
           val v = InternoOrdine(node, elem)
-          node += v
           initNode(v, i + 1, dep)
         }
       }
@@ -109,8 +124,22 @@ class Ordini(val varName: String, val dependencies: Vector[String]) {
    * Controllo di correttezza degli ordini totali
    */
   private def orderNotTotal(ord: Map[String, Int]): Boolean = {
-    //TODO implementare il controllo di ordine totale
-    false
+    val domain = Domain(varName) match {
+      case Some(x) => x.accepted
+      case None => throw new Exception("An order can be built only on a registered variable")
+    }
+    var incrementor = 0
+    val keys = ord.keys.toList
+    keys.foreach((s: String) => if (domain contains s) incrementor += 1)
+    domain.foreach((s: String) => if (keys contains s) incrementor -= 1)
+    if (incrementor != 0)
+      true
+    else {
+      // converto i valori ad insieme
+      val values = ord.values.toSet
+      // se sono tutti diversi la dimensione è uguale, altrimenti l'ordine non è totale
+      values.size != ord.values.size
+    }
   }
 
   /**
@@ -123,6 +152,10 @@ class Ordini(val varName: String, val dependencies: Vector[String]) {
       case _ => None
     }
   }
+
+  // costruttore per variabili indipendenti
+  def this(v: String) = this(v, Vector())
+
   def add(assign: Array[String], ordine: Map[String, Int]): Boolean =
     // controllo di consistenza sugli assegnamenti e dell'ordine
     if (assign.length != dependencies.length || orderNotTotal(ordine))
@@ -135,7 +168,7 @@ class Ordini(val varName: String, val dependencies: Vector[String]) {
         // cerco il figlio con il valore dell'assegnamento
         val next = findNode(assign(i), end.getSons)
         error = next match {
-          case Some(x) => 
+          case Some(x) =>
             if (x.leaves >= 1)
               true
             else { end = x; i += 1; false }
@@ -147,24 +180,36 @@ class Ordini(val varName: String, val dependencies: Vector[String]) {
         false
       else {
         // trovato il nodo terminale a cui attaccare la foglia in end
-        end += LeafOrdine(end, ordine)
+        LeafOrdine(end, ordine)
         true
       }
     }
   def checkCorrectness(): Boolean = {
-    //TODO calcolo del numero atteso di foglie
-    val l = 0
-    root.leaves == l
+    var inc = 1
+    dependencies.foreach((s: String) => {
+      val dom = Domain(s) match {
+        case Some(x) => x.accepted
+        case None => throw new Exception("All dependecies should be registered variables")
+      }
+      inc *= dom.size
+    })
+    root.leaves == inc
   }
 
-  def getConstraints(): Option[TVincolo] =
+  //metodo di aggiunta per variabili indipendenti
+  def add(ordine: Map[String,Int]) :Boolean = add(Array[String](),ordine)
+  def getConstraints(): Option[Constraint] =
     if (!checkCorrectness)
       None
     else {
-      //TODO aggiungere la definizione corretta del vincolo
-      val v: TVincolo = null
+      // inizializzo la dimensione del vincolo e il vincolo stesso
+      // inserisco le dipendenze e la variabile attuale
+      val arr = new Array[String](dependencies.size + 1)
+      dependencies.copyToArray(arr)
+      arr(arr.size - 1) = varName
+      val v: Constraint = new Constraint(arr)
       //inserimento dei valori autorizzati
-      def adder(arr: Array[String], node: AlberoOrdini, i: Int, v: TVincolo): Unit = node match {
+      def adder(arr: Array[String], node: AlberoOrdini, i: Int, v: Constraint): Unit = node match {
         case InternoOrdine(_, value) =>
           // copio l'array creato fino a questo punto e assegno il valore relativo al nodo interno corrente
           for (son <- node.getSons) {
