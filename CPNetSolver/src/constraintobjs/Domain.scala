@@ -26,6 +26,7 @@ object Domain {
   
   def apply(variable: String): Option[Domain] = domains get variable
 
+  def reset() : Unit = domains.clear
 }
 
 /**

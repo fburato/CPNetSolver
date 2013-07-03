@@ -18,6 +18,10 @@ object Ordini {
 
   def apply(variable: String): Option[Ordini] =
     listaOrdini get variable
+    
+  def reset() {
+    listaOrdini.clear
+  }
 }
 /**
  * Classe di rappresentazione degli ordini associati ad una variabile.
