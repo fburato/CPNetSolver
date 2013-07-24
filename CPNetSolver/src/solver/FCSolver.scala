@@ -27,8 +27,8 @@ object FCSolver {
     // popolo constraints, independents e domainsSet
     for(variable <- domains.keys) {
       val constList = domains(variable).constraints.toList
-      // se c' un solo vincolo, che insiste su una sola variabile che accetta un solo valore allora
-      // la variabile in questione  indipendente
+      // se c'Ã¨ un solo vincolo, che insiste su una sola variabile che accetta un solo valore allora
+      // la variabile in questione Ã¨ indipendente
       checkIndependence(constList) match {
         case Some(x) => independents enqueue ((variable,x.accepted(0)(0)))
         case None =>domainsSet += ((variable,domains(variable).accepted))

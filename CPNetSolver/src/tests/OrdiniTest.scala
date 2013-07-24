@@ -10,7 +10,7 @@ import org.scalatest.{FunSuite, BeforeAndAfter}
 import constraintobjs._
 import scala.collection.mutable.HashMap
 /**
- * Test di unità su Ordini e Comparator
+ * Test di unit√† su Ordini e Comparator
  * @author Francesco Burato
  *
  */

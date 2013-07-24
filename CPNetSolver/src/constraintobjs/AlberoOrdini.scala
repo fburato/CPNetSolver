@@ -71,7 +71,7 @@ case class InternoOrdine(val parent: AlberoOrdini, val varValue: String) extends
         update(node.parent)
     }
     newson match {
-      // aggiorna solo se il nodo aggiunto  di tipo foglia
+      // aggiorna solo se il nodo aggiunto Ã¨ di tipo foglia
       case LeafOrdine(parent, order) => update(this)
       case x =>
     }

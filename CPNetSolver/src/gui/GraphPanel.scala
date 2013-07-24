@@ -18,6 +18,8 @@ import edu.uci.ics.jung.visualization.decorators.{ EdgeShape, PickableEdgePaintT
 import edu.uci.ics.jung.visualization.picking.PickedState
 import scala.collection.JavaConversions.asScalaIterator
 import scala.swing.Panel
+
+
 /**
  * Pannello per il disegno dei grafi
  * @author Francesco Burato

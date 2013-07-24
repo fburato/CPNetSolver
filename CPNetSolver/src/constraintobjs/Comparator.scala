@@ -14,16 +14,16 @@ package constraintobjs
 trait Comparator {
   /**
    * Aggiuge al comparatore attuale un'assegnamento di variabile a valore.
-   * Restituisce true iff il comparatore è stabile (non è necessario specificare altre 
+   * Restituisce true iff il comparatore √® stabile (non √® necessario specificare altre 
    * informazioni per confrontare due valori)
    */
   def put(varName : String, value : String) : Boolean
   /**
-   * Restituisce Some(true) iff il comparatore è stabile e il valore value1
-   * associato alla variabile varName è minore del valore value2 associato alla
+   * Restituisce Some(true) iff il comparatore √® stabile e il valore value1
+   * associato alla variabile varName √® minore del valore value2 associato alla
    * medesima variabile.
    * 
-   * Restituisce None se il comparatore non è stabile
+   * Restituisce None se il comparatore non √® stabile
    */
   def isMinor(value1 : String, value2 : String) : Option[Boolean]
   /**
