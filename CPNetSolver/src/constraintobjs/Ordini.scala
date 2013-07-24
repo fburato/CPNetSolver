@@ -36,11 +36,11 @@ class Ordini(val varName: String, val dependencies: Vector[String]) {
     var setted = 0
     var order: Map[String, Int] = null
     if(dependencies.length == 0) {
-      //la variabile � indipendente: carico l'ordine unico
+      //la variabile è indipendente: carico l'ordine unico
       findOrder()
     }
     def put(variable: String, value: String): Boolean = {
-      // in caso di inizializzazione gi� eseguita ritorna immediatamente true
+      // in caso di inizializzazione già eseguita ritorna immediatamente true
       if(order != null)
         return true
       val index = dependencies.indexOf(variable) // trovo l'indice della variabile
@@ -64,7 +64,7 @@ class Ordini(val varName: String, val dependencies: Vector[String]) {
       }
     }
     // PRE: tutti i valori in buffer appartengono ai domini delle variabili 
-    // ovvero � garantita l'esistenza nell'albero degli ordini
+    // ovvero è garantita l'esistenza nell'albero degli ordini
     def findOrder(): Boolean = {
       var node: AlberoOrdini = Ordini.this.root
       for (value <- buffer) {
@@ -74,7 +74,7 @@ class Ordini(val varName: String, val dependencies: Vector[String]) {
         }
       }
       assert(node != NilOrdine)
-      // node contiene il nodo interno il cui figlio � il nodo d'ordine
+      // node contiene il nodo interno il cui figlio è il nodo d'ordine
       val ordine = node.getSons match {
         case Nil => NilOrdine
         case x :: rest => x
@@ -85,7 +85,7 @@ class Ordini(val varName: String, val dependencies: Vector[String]) {
         case LeafOrdine(_, ord) => order = ord; true
       }
     }
-    // Se l'ordine � stato impostato allora restituisco il valore corretto, altrimenti None
+    // Se l'ordine è stato impostato allora restituisco il valore corretto, altrimenti None
     def isMinor(value1: String, value2: String): Option[Boolean] =
       if (order == null) {
         None
@@ -141,7 +141,7 @@ class Ordini(val varName: String, val dependencies: Vector[String]) {
     else {
       // converto i valori ad insieme
       val values = ord.values.toSet
-      // se sono tutti diversi la dimensione � uguale, altrimenti l'ordine non � totale
+      // se sono tutti diversi la dimensione è uguale, altrimenti l'ordine non è totale
       values.size != ord.values.size
     }
   }
@@ -222,7 +222,7 @@ class Ordini(val varName: String, val dependencies: Vector[String]) {
             adder(a, son, i + 1, v)
           }
         case LeafOrdine(_, ordine) =>
-          // trovo il valore pi� preferito e completo l'array
+          // trovo il valore più preferito e completo l'array
           val l = ordine.reduce((c1: (String, Int), c2: (String, Int)) => if (c1._2 > c2._2) c1 else c2) //massimo della mappa
           arr(i) = l._1
           v insert arr
