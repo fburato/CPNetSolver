@@ -4,6 +4,17 @@
  * Autore: Francesco Burato
  * Creazione: 28/giu/2013
  */
+
+/*
+ * Bugfix:
+ * 26/07/2013
+ * - Bug:   restituzione None in caso di dipendenze multivariate.
+ * - Causa: controllo "if (x.leaves >= 1)" errato in quanto il controllo è stato inserito per
+ * verificare che non ci sia sovrascrittura di un ordine ma in realtà non tiene conto del caso
+ * multivariato
+ * - Soluzione: controllo aggiornato a "if (i == dependencies.length-1 && x.leaves >= 1)" in maniera
+ * da realizzare la funzionalità solo quando si raggiunge il nodo terminale.
+ */
 package constraintobjs
 
 import scala.collection.mutable.HashMap
@@ -173,7 +184,9 @@ class Ordini(val varName: String, val dependencies: Vector[String]) {
         val next = findNode(assign(i), end.getSons)
         error = next match {
           case Some(x) =>
-            if (x.leaves >= 1)
+            if (i == dependencies.length-1 && x.leaves >= 1)
+              // all'ultimo nodo se x.leaves è positivo vuol dire che 
+              // l'assegnamento è stato già effettuato, quindi l'aggiunta deve fallire
               true
             else { end = x; i += 1; false }
           // se non viene trovato allora segnalo lerrore
