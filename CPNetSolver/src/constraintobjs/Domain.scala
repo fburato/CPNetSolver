@@ -52,6 +52,11 @@ class Domain(val variable: String, val accepted: Set[String]) {
 
     constraints += c
   }
-
+  
+  /**
+   * Tests if some element is contained in this domain.
+   */
+  def contains(elem: String): Boolean = accepted.contains(elem)
+  
 }
 
