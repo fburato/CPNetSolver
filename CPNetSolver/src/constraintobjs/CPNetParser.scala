@@ -124,7 +124,7 @@ object CPNetParser extends RegexParsers {
       if (currentVarDependencies.get(0) == "") { //independent var
         val ord = new Ordini(currentVariable)
         ord.add(map)
-        Ordini.addOrdini(currentVariable, ord)
+        Ordini.addOrdini(ord)
       }
         
       else { //dependent var
@@ -135,7 +135,7 @@ object CPNetParser extends RegexParsers {
           case None => {
             val ord = new Ordini(currentVariable, currentVarDependencies.get)
             ord.add(assignment.toArray, map)
-            Ordini.addOrdini(currentVariable, ord)
+            Ordini.addOrdini(ord)
           }
         }
       }

@@ -20,9 +20,9 @@ package constraintobjs
 import scala.collection.mutable.HashMap
 object Ordini {
   val listaOrdini: HashMap[String, Ordini] = new HashMap[String, Ordini]
-  def addOrdini(variable: String, ord: Ordini) {
-    listaOrdini get variable match {
-      case None => listaOrdini += (variable -> ord)
+  def addOrdini(ord: Ordini) {
+    listaOrdini get ord.varName match {
+      case None => listaOrdini += (ord.varName -> ord)
       case _ =>
     }
   }
@@ -110,6 +110,10 @@ class Ordini(val varName: String, val dependencies: Vector[String]) {
         buffer(i) = null
       order = null
       setted = 0
+      if(dependencies.length == 0) {
+      //la variabile è indipendente: carico l'ordine unico
+        findOrder()
+      }
     }
   }
 
