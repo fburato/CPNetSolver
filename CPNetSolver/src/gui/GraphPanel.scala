@@ -84,5 +84,6 @@ class GraphPanel {
   }
 
   private def clearGraph() =
-    graph.getVertices.iterator foreach { vertex => graph.removeVertex(vertex) }
+    graph.getVertices.toArray foreach { vertex => graph.removeVertex(vertex.asInstanceOf[String]) }
+    
 }
