@@ -16,6 +16,7 @@ import javax.swing.UIManager
 import scala.swing.Alignment
 import java.awt.Color
 import java.awt.Font
+import javax.swing.BorderFactory
 
 object CPNetSolver extends SimpleSwingApplication {
   
@@ -50,16 +51,24 @@ object CPNetSolver extends SimpleSwingApplication {
       contents += new Separator
       contents += new MenuItem(Action("Edit current CPNet") {editDialog.visible = true})
     }
-    contents += new Menu("?")
+    contents += new Menu("?") {
+      contents += new MenuItem(Action("About") {
+        Dialog.showMessage(null, "Constraint Programming class\nUniversity of Padua 2012/2013\nAuthors:\n * Francesco Burato\n * Simone Carriero\nhttp://www.github.com/fburato/CPNetSolver", "About", Dialog.Message.Info)
+      })
+    }
   }
   
   val graphPanel = new GraphPanel
   
   lazy val ui = new BoxPanel(Orientation.Vertical) {
     contents += CPNetLabel
-    contents += CPNetTextArea
+    val s1 = new ScrollPane(CPNetTextArea)
+    s1.border = BorderFactory.createEmptyBorder
+    contents += s1
     contents += solutionsLabel
-    contents += solutionsTextArea
+    val s2 = new ScrollPane(solutionsTextArea)
+    s2.border = BorderFactory.createEmptyBorder
+    contents += s2
   }
   
   def top = new MainFrame {
@@ -72,15 +81,32 @@ object CPNetSolver extends SimpleSwingApplication {
     contents = b
   }
   
+  lazy val grid = new GridBagPanel {
+    val c = new Constraints
+    c.fill = Fill.Horizontal
+
+    val s = new ScrollPane(editTextArea)
+    s.border = BorderFactory.createEmptyBorder
+    
+    c.weightx = 0.5
+
+    c.fill = Fill.Horizontal
+    c.gridx = 0;
+    c.gridy = 0;
+    layout(s) = c
+
+    c.fill = Fill.Horizontal
+    c.weightx = 0.5;
+    c.gridx = 0;
+    c.gridy = 1;
+    layout(setModification) = c
+  }
+  
   val editDialog = new Dialog {
     title = "Edit current CPNet"
     modal=true
-    
-    val b = new BoxPanel(Orientation.Vertical)
-    b.contents += editTextArea
-    b.contents += setModification
-    
-    contents = b
+
+    contents = grid
 
     listenTo(setModification)
     reactions += {
@@ -137,7 +163,6 @@ object CPNetSolver extends SimpleSwingApplication {
     chooser.title = title
     val result = chooser.showOpenDialog(null)
     if (result == FileChooser.Result.Approve) {
-      println("Approve -- " + chooser.selectedFile)
       Some(chooser.selectedFile)
     }
     else None
