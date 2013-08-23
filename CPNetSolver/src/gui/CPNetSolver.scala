@@ -124,7 +124,7 @@ object CPNetSolver extends SimpleSwingApplication {
     layout(setModification) = c
   }
   
-  val editDialog = new Dialog {
+  val editDialog : Dialog = new Dialog {
     title = "Edit current CPNet"
     modal=true
 
@@ -134,7 +134,7 @@ object CPNetSolver extends SimpleSwingApplication {
     reactions += {
       case ButtonClicked(`setModification`) => {
         importFromString(editTextArea.text)
-        this.visible = false
+        //this.visible = false
       }
     }
   }
@@ -151,7 +151,7 @@ object CPNetSolver extends SimpleSwingApplication {
   }
   
   def cleanTextArea() = {
-    editTextArea.text = ""
+    //editTextArea.text = ""
     CPNetLabel.text = ""
     CPNetTextArea.text = ""
     solutionsLabel.text = ""
@@ -198,13 +198,14 @@ object CPNetSolver extends SimpleSwingApplication {
       val solutions = FCSolver.solve
       val pog = new POGCreator
       graphPanel.paintGraph(pog.getGraph)
+      editDialog.visible = false
       setTextArea(string, solutions)
     }
     catch {
       case e:Exception => {
         graphPanel.cleanAll
         cleanTextArea()
-        Dialog.showMessage(null, e.getMessage, "Error", Dialog.Message.Error)    
+        Dialog.showMessage(null, e.getMessage, "Error", Dialog.Message.Error) 
       }
     }
   }
