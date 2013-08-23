@@ -27,13 +27,14 @@ import scala.collection.mutable
 import solver.FCSolver
 import java.io.FileReader
 import java.io.Reader
+import scala.collection.mutable.ListBuffer
 
 /**
  * Singleton parser
  * @author Simone Carriero
  */
 object CPNetParser extends RegexParsers {
-  
+
   /**
    * Parses a string formatted like in the following example and
    * adds domains and orders to the objects Domain and Ordini
@@ -64,6 +65,7 @@ object CPNetParser extends RegexParsers {
       case NoSuccess(msg, _) => throw new Exception("Error while parsing variable " +
           currentVariable + ": " + msg)
     }
+    processOrders
     addConstraints
   }
   
@@ -94,6 +96,7 @@ object CPNetParser extends RegexParsers {
       case NoSuccess(msg, _) => throw new Exception("Error while parsing variable " +
           currentVariable + ": " + msg)
     }
+    processOrders
     addConstraints
   }
   
@@ -132,29 +135,8 @@ object CPNetParser extends RegexParsers {
   
   private def order = repsep(literal, ",") ~ ":" ~ repsep(literal, ">") ^^ {
     case assignment ~ ":" ~ order => {
-      
-      checkOrderConsistency(order)
-
-      val map = createOrderMap(order)
-        
-      if (currentVarDependencies.get(0) == "") { //independent var
-        val ord = new Ordini(currentVariable)
-        ord.add(map)
-        Ordini.addOrdini(ord)
-      }
-        
-      else { //dependent var
-        Ordini(currentVariable) match {
-          case Some(ord) => {
-            ord.add(assignment.toArray, map)
-          }
-          case None => {
-            val ord = new Ordini(currentVariable, currentVarDependencies.get)
-            ord.add(assignment.toArray, map)
-            Ordini.addOrdini(ord)
-          }
-        }
-      }
+      // saving order, to be processed later
+      OrderSavingList += new OrderSaving(assignment,order,currentVariable,currentVarDependencies)
     }  
   }
     
@@ -173,13 +155,47 @@ object CPNetParser extends RegexParsers {
 
   }
   
-  private def checkOrderConsistency(order: List[String]): Unit = {
-      val domain = Domain(currentVariable).get
+  private def checkOrderConsistency(variable: String, order: List[String]): Unit = {
+      val domain = Domain(variable).get
       if( order exists {x => !domain.contains(x) } )
-        throw new Exception("orders of variable " + currentVariable + " contain values out of its domain" )
+        throw new Exception("orders of variable " + variable + " contain values out of its domain" )
   }
 
+  private def processOrders = {
+    for (o <- OrderSavingList) {
+      checkOrderConsistency(o.variable, o.order)
+
+      val map = createOrderMap(o.order)
+        
+      if (o.varDependencies.get(0) == "") { //independent var
+        val ord = new Ordini(o.variable)
+        ord.add(map)
+        Ordini.addOrdini(ord)
+      }
+        
+      else { //dependent var
+        Ordini(o.variable) match {
+          case Some(ord) => {
+            ord.add(o.assignment.toArray, map)
+          }
+          case None => {
+            val ord = new Ordini(o.variable, o.varDependencies.get)
+            ord.add(o.assignment.toArray, map)
+            Ordini.addOrdini(ord)
+          }
+        }
+      }
+    }
+  }
+  
   private var currentVariable: String = ""
   private var currentVarDependencies: Option[Vector[String]] = None
+  
+  // used to save order while parsing, because order can't be created before the creation of all the domains
+  private val OrderSavingList = new ListBuffer[OrderSaving]
+  private class OrderSaving(val assignment: List[String],
+                            val order: List[String],
+                            val variable: String,
+                            val varDependencies: Option[Vector[String]]);
   
 }
