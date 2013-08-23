@@ -60,6 +60,9 @@ object CPNetParser extends RegexParsers {
    * you use concatenation of string like in the example 
    */
   def parse(input: String) = {
+    currentVarDependencies = None
+    currentVariable = ""
+    OrderSavingList.clear()
     parseAll(variables, input) match {
       case Success(result, _) => result
       case NoSuccess(msg, _) => throw new Exception("Error while parsing variable " +
@@ -91,6 +94,9 @@ object CPNetParser extends RegexParsers {
    *   !x,!y:!z>z
    */
   def parse(input: Reader) = {
+    currentVarDependencies = None
+    currentVariable = ""
+    OrderSavingList.clear()
     parseAll(variables, input) match {
       case Success(result, _) => result
       case NoSuccess(msg, _) => throw new Exception("Error while parsing variable " +
