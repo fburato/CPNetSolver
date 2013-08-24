@@ -71,5 +71,8 @@ class Constraint(val vars:     Array[String],
     new Constraint(vars, newAccepted)
   }
   
+  override def toString : String = {
+    "(" + vars.mkString(",") + ")->{" + accepted.map {case x : Array[String] => "(" + x.mkString(",") +") "} + "}"
+  }
 }
 

@@ -74,5 +74,9 @@ class Domain(val variable: String, val accepted: Set[String]) {
    */
   def contains(elem: String): Boolean = accepted.contains(elem)
   
+  /**
+   * toString method for debugging
+   */
+  override def toString : String = accepted.toString
 }
 

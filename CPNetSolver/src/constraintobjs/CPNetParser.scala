@@ -112,7 +112,9 @@ object CPNetParser extends RegexParsers {
       val domain = i._2      
       val ord = Ordini(variable).getOrElse( throw new Exception("order of variable " + variable + " not found") )
       val c = ord.getConstraints.getOrElse( throw new Exception("error while calculating constraints of variable " + variable) )
-      domain.addConstraint(c)
+      //add to every domain the constraint talks about the constraint itself
+      for ( v <- c.vars) 
+        Domain(v).getOrElse(throw new Exception("order of variable " + v + " not found")).addConstraint(c)
     }
   }
 
