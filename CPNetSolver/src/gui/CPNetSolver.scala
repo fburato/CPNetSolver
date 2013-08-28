@@ -164,8 +164,9 @@ object CPNetSolver extends SimpleSwingApplication {
     var s = ""
     for (sol <- solutions) {
       for (v <- sol) {
-        s = s + v._1 + " = " + v._2 + "\n"
+        s = s + v._1 + " = " + v._2 + " "
       }
+      s = s + "\n"
     }
     if (s.isEmpty){
       CPNetLabel.text = ""
