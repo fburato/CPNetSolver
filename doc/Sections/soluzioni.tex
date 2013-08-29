@@ -1,0 +1,32 @@
+\subsection{Ricerca delle soluzioni}
+La ricerca delle soluzioni della CP-Net è fatta attraverso un
+algoritmo di tipo Backtracking+Forward Checking modificato per trovare
+tutte le soluzioni ottime e non solo una soluzione.
+
+L'algoritmo seguito per risolvere un problema a $m$ variabili è quindi
+il seguente:
+\begin{enumerate}
+\item \textbf{Inizializzazione:} Si raccolgano tutti i domini di tutte
+  le variabili del problema e tutti i vincoli ottenuti dalla
+  conversione della CP-Net in CSP. Ciò consente di ottenere tutte le
+  tuple ammesse dagli assegnamenti delle variabili in un ordine.
+\item \textbf{Partenza:} Si esegua la ricerca in profondità partendo
+  dal livello 0 avendo come vettore di supporto un vettore vuoto.
+\item \textbf{Ricerca in profondità di livello i-esimo e vettore di
+    supporto $w$:} Se $i=m$ allora $w$ contiene una soluzione alla
+  CP-Net che viene segnalata, altrimenti se il dominio i-esimo è vuoto
+  allora vuol dire che l'assegnamento precedente ha causato un
+  inconsistenza e la ricerca a questo punto termina, altrimenti per
+  ogni valore $v$ del dominio i-esimo:
+  \begin{enumerate}
+  \item Si riducano i vincoli attuali rispetto a $v$ ovvero si
+    ottengono tutte le tuple che ammettono la variabile i-esima
+    associata al valore $v$.
+  \item Si intersechino i domini correnti con le proiezioni dei vincoli
+    ovvero si ottengano tutti e soli i valori ammessi dai vincoli per
+    ciascuna variabile avendo ridotto i domini rispetto a $v$.
+  \item Si assegni $w[i]=v$.
+  \item Si esegua la ricerca in profondità di livello i+1 con il nuovo
+    w come vettore di supporto.
+  \end{enumerate}
+\end{enumerate}

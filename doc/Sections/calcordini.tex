@@ -1,0 +1,102 @@
+\subsection{Calcolo diagramma di Hässe per gli assegnamenti}
+La realizzazione del diagramma di rappresentazione dell'ordine degli assegnamenti necessita innanzitutto di una libreria in grado di gestire e
+rappresentare grafi all'interno di un'interfaccia grafica. La scelta è
+quindi ricaduta sul ``Java Universal Network/Graph
+Framework''\footnote{\url{http://jung.sourceforge.net/}}, una libreria
+open source che possiede tutte le caratteristiche necessarie al
+progetto.
+
+Una volta che i grafi possono essere rappresentati è necessario
+indivduare un modo efficiente per riuscire a calcolare l'ordine degli assegnamenti utilizzando la semantica dei flip peggiorativi. A questo
+scopo è stato realizzato un algortimo che è in grado di calcolare in
+tempo ammortizzato $O(e + v)$ l'intero diagramma degli ordini, dove
+$e$ è il numero di archi del grafo e $v$ il numero di vertici.
+
+\subsubsection{Contatore variabile}
+L'astrazione che consente di raggiungere un alta efficienza è quella
+del \textit{contatore variabile}. Se un contatore binario è un
+contatore in cui tutte gli elementi del contatore lavorano in modulo
+2\footnote{Si veda Cormen, Leiserson, Rivest e Stein ``Introduzione
+  agli algortimi e Strutture Dati'' - McGraw Hill}, definiamo un
+contatore variabile un contatore in cui a ciascun elemento è associato
+un diverso insieme quoziente (non solo 2).
+
+Per fare un esempio, in un contatore variabile a 3 elementi i cui
+insiemi quozienti siano quelli modulo 5, 7 e 3 una possibile
+configurazione degli elementi sarebbe (4,4,2). Un incremento
+determinerebbe nel contatore il cambiamento della configurazione a
+(4,5,0) in quanto l'aggiunta di 1 all'elemento meno significativo
+causa un riporto che deve andare a trasferirsi all'elemento
+successivo.
+
+L'utilizzo del contatore variabile all'interno del calcolo dell'ordine
+degli assegnamenti consiste nell'impiego di un contatore per riuscire
+ad individuare senza ripetizioni tutti i flip peggiorativi di una
+configurazione. Per fare ciò si stabilisce un ordine arbitrario a
+tutti i valori dei domini di ciascuna variabile e ad ogni elemento del
+contatore si associa una variabile ovvero un'insieme quoziente modulo
+la cardinalità del dominio di tale variabile. Per evitare le
+ripetizioni è sufficiente considerare una configurazione $i$ di un
+contatore e calcolare tutte e sole le configurazioni che si ottengono
+da $i$ modificando un solo elemento del contatore e che siano
+\textit{strettamente maggiori di $i$}.
+
+Ad esempio, considerando il contatore introdotto in precedenza, data
+la configurazione $i$=(3,1,0), allora la configurazioni strettamente
+maggiori diverse per al più un elemento sono: (3,1,1), (3,1,2),
+(3,2,0), (3,3,0), (3,4,0), (3,5,0), (3,6,0), (4,1,0).
+
+Stabilito l'ordine degli elementi per i domini di ogni variabile, dato
+un contatore è immediato risalire a quale sia l'assegnamento delle
+variabili che è rappresentata dal contatore. Pertanto data una
+configurazione di contatore $i$ e le configurazioni strettamente
+maggiori di $i$ ottenute con il procedimento precedentemente
+descritto, si ottengono un assegnamento di variabili e tutti gli
+assegnamenti a distanza 1. Usando i compartori descritti alla sezione
+\ref{sect:comparatori} è immediato calcolare quale sia la relazione
+esistente di preferenza tra gli assegnamenti.
+
+L'algoritmo per il calcolo degli ordini degli assegnamenti è quindi il
+seguente:
+\begin{enumerate}
+\item \textbf{Inizializzazione:} Si stabilisca un ordine per i valori
+  di ciascuna variabile, si estraggano i comparatori dagli ordini di
+  ogni variabile, si inizializzi un contatore variabile $c$ ad
+  elementi pari alla cardinalità delle variabili, si inizializzi un
+  grafo orientato $G$.
+\item \textbf{Ciclo di calcolo:} Fino a che $c$ non è arrivato alla
+  configurazione massima:
+  \begin{enumerate}
+  \item Si calcoli l'insieme delle configurazioni strettamente
+    maggiori di $c$ distanti 1.
+  \item Per ogni configurazione ottenuta al punto (a) si usi il
+    comparatore associato all'unica variabile modificata per
+    determinare quale delle configurazioni sia preferita e si segnali
+    in $G$ la preferenza.
+  \item Si incrementi $c$.
+  \end{enumerate}
+\end{enumerate}
+
+\subsubsection{Complessità}
+La complessità dell'algoritmo precedentemente descritto, ipotizzando
+che si utilizzi la rappresentazione dei nodi interni degli ordini a
+tabella hash, è esattamente pari a $O(e + v)$ in quanto:
+\begin{itemize}
+\item Tutti i passi di inizializzazione sono costanti e svolti in
+  tempo $O(1)$.
+\item Il numero di iterazioni del ciclo di calcolo è esattamente
+  $O(v)$.
+\item Il numero totale di configurazioni strettamente maggiori di $c$
+  e distanti 1 nella totalità dell'esecuzione è $O(e)$ e il loro
+  calcolo è a tempo costante, quindi il costo totale del passo (a) in
+  tutta l'esecuzione è $O(e)$.
+\item Con la tabella hash il costo per trovare l'ordine interessato è
+  $O(1)$ quindi il costo complessivo del passo (b) in tutta
+  l'esecuzione è $O(e)$ in quanto il confronto tra due valori trovato
+  l'ordine è svolto in tempo costante.
+\item L'incremento del contatore $c$ è realizzabile in tempo
+  ammortizzato costante quindi il costo complessivo del passo (c) per l'intera
+  esecuzione è $O(v)$.
+\end{itemize}
+
+Complessivamente quindi si ha $O(1) + O(e) + O(v)= O(e+v)$.
