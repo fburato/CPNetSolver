@@ -1,0 +1,17 @@
+\subsection{Vincoli}
+I vincoli sono rappresentati dalla classe \texttt{Constraint}, caratterizzata dai due seguenti campi dati:
+\begin{itemize}
+\item \texttt{vars: Array[String]} che rappresenta una lista ordinata di variabili,
+\item \texttt{accepted: Buffer[Array[String]]} che rappresenta la lista di tutte le
+istanziazioni accettate per quelle variabili.
+\end{itemize}
+
+%$O(|dom(V_1)| \cdot \dots \cdot |dom(V_n)|)$ ove $ V_1, \dots, V_n $
+
+Ad esempio, date tre variabili $X,\ Y$ e $Z$ tali che $dom(X)=\{0,1\},\ dom(Y)=\{0,1\}$ e $dom(Z)=\{0,1\}$, l'oggetto di tipo \texttt{Constraint} che
+rappresenta il vincolo $X+Y=Z$ avrà
+\begin{itemize}
+  \item \texttt{vars = [X, Y, Z]} e 
+  \item \texttt{accepted = [ [0, 0, 0], [1, 0, 1], [0, 1, 1] ]}.
+\end{itemize}
+

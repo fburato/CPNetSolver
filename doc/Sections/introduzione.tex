@@ -1,2 +1,81 @@
 \section{Introduzione}
-Lorem ipsum
+
+
+\subsection{Scopo del progetto}
+Lo scopo del progetto è la progettazione e l'implementazione di un'applicazione
+per la risoluzione di CP-Net, che permetta di visualizzare
+attraverso una GUI la CP-Net iniziale e dell'ordine parziale delle soluzioni della
+medesima.
+Una caratteristica importante dell'applicazione è che permette la risoluzione di
+CP-Net cicliche.
+
+\subsection{Funzionamento generale}
+Visto che l'applicazione permette la risoluzione di CP-Net cicliche è
+necessario che la CP-Net in input sia convertita in un problema di vincoli
+classico (CSP), quindi il funzionamento generale è il seguente:
+\begin{itemize}
+  \item si accetta in input una CP-Net,
+  \item la CP-Net viene convertita in un CSP,
+  \item si calcolano e si visualizzano tutte le soluzioni ottime del CSP,
+  \item si genera e si visualizza il grafo degli ordini parziali delle soluzioni.
+\end{itemize}
+
+\subsection{Manuale d'uso}
+
+All'apertura del programma non viene caricata alcuna CP-Net.
+In ciascun momento, attraverso il menu, l'utente può decidere di:
+\begin{itemize}
+
+\item aprire una CP-Net: utilizzando il menu \textit{File -> Import From File} e
+selezionando un file di testo formattato come descritto in sezione 
+\ref{sect:file}. A questo punto l'applicazione visualizzerà le soluzioni e il grafo degli ordini parziali delle soluzioni della CP-Net.
+
+\item modificare la CP-Net che si sta visualizzando: utilizzando il menu
+\textit{File -> Edit current CP-Net}, sempre attinendosi alla sintassi descritta
+in sezione \ref{sect:file}. Le soluzioni e il grafo degli ordini parziali delle
+soluzioni visualizzati verranno automaticamente aggiornati.
+
+\end{itemize}
+
+\subsubsection{Descrizione di una CP-Net}
+\label{sect:file}
+Il formato usato per la descrizione di una CP-Net è in seguito descritto.
+Per ciascuna variabile Z che dipende dalle variabili X e Y occorre specificare,
+nel seguente ordine:
+\begin{itemize}
+  \item il nome della variabile e i nomi delle variabili da cui essa dipende, con
+  una sintassi come nel seguente esempio: \texttt{var Z dependsOn=\{X,Y\}}. Se la
+  variabile in questione non dipende da alcuna altra variabile la sintassi da
+  usare è la seguente: \texttt{var Z dependsOn=\{\}}
+  \item gli elementi che fanno partedel dominio della variabile, con una sintassi
+  come nel seguente esempio: \texttt{dom=\{z, !z\}}.
+  \item l'ordine associato a ciascun possibile assegnamento delle variabile di
+  dipendenza. Ad esempio, se $dom(X)={x,!x}$ e $dom(Y)={y,!y}$ un possibile
+  insieme di ordini è il seguente:
+  \begin{verbatim}
+    x,y:z>!z
+    x,!y:!z>z
+    !x,y:z>!z
+    !x,!y:!z>!z
+  \end{verbatim}
+  Se la variabile in questione non dipende da alcuna altra variabile la sintassi
+  da usare è la seguente: \texttt{:z>!z} (o \texttt{:!z>z}).
+\end{itemize} 
+
+Segue un esempio completo che descrive una CP-Net:
+\begin{verbatim}
+var X dependsOn={}
+dom={x,!x}
+:x>!x
+
+var Y dependsOn={}
+dom={y,!y}
+:y>!y
+
+var Z dependsOn={X,Y}
+dom={z,!z}
+x,y:z>!z
+x,!y:!z>z
+!x,y:!z>z
+!x,!y:!z>z
+\end{verbatim}
