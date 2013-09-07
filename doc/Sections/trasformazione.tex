@@ -1,17 +1,20 @@
 \subsection{Trasformazione da CP-Net a CSP}
 Come accennato in precedenza, la ragione per cui si ha la necessità di
-trasformare la CP-Net in un CSP è che l'applicazione permette la risoluzione di
-CP-Net cicliche, e per la risoluzione di questo tipo di CP-Net è necessario
-effettuare tale trasformazione.
+trasformare la CP-Net in un CSP è che l'applicazione permette la
+risoluzione di CP-Net cicliche e per la risoluzione di questo tipo di
+CP-Net è necessario effettuare tale trasformazione.
 
-Data una CP-Net è sempre possibile costruire un CSP classico con lo stesso
-insieme di soluzioni ottime nel seguento modo: per ogni ordine $X_1=x_1, ...,
-X_n=x_n: Y=y_1 > Y=y_2 > ... > Y=y_k$ costruiamo il vincolo $X_1=x_1, ..., X_n=x_n
-=> Y=y_1$.
+Data una CP-Net è sempre possibile costruire un CSP classico con lo
+stesso insieme di soluzioni ottime nel seguente modo: per ogni ordine
+$X_1=x_1, ..., X_n=x_n: Y=y_1 > Y=y_2 > \dots > Y=y_k$ si aggiunge al
+vincolo definito sulle variabili $(X_1, \dots, X_n, Y)$ la tupla
+$(x_1, \dots, x_n, y_1)$.
 
-Vista la rappresentazione adottata per gli ordini, questo corrisponde a creare, per
-ciascuna variabile $v$, un vincolo per ogni foglia dell'albero degli ordini di $v$.
-Infatti, considerato che per ogni foglia si conosce l'istanziazione delle variabili
-$X_1=x_1, ..., X_n=x_n$ che è rappresentata da tutti i nodi tra la radice e la
-foglia, e il relativo ordine $Y=y_1 > Y=y_2 > ... > Y=y_k$
-è possibile costruire il vincolo $X_1=x_1, ..., X_n=x_n => Y=y_1$.
+Vista la rappresentazione adottata per gli ordini, questo corrisponde
+a creare, per ciascuna variabile $v$, un vincolo per ogni foglia
+dell'albero degli ordini di $v$.  Infatti, considerato che per ogni
+foglia si conosce l'istanziazione delle variabili $X_1=x_1, ...,
+X_n=x_n$, che è rappresentata da tutti i nodi interni, e la foglia con
+il relativo ordine $Y=y_1 > Y=y_2 > ... > Y=y_k$, è sufficiente
+applicare il procedimento di aggiunta precedentemente descritto su
+tutti i nodi foglia dell'albero per ottenere un vincolo completo.
