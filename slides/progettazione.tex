@@ -9,21 +9,24 @@
 
 \begin{frame}{Rappresentazione dei domini}
 
-
-class Domain
 \begin{itemize}
-  \item[-] accepted: Set[String]
-  \item[+] contains(elem: String): Boolean
+  \item class Domain
+  \begin{itemize}
+    \item[-] accepted: Set[String]
+    \item[+] contains(elem: String): Boolean
+  \end{itemize}
 \end{itemize}
 \end{frame}
 
 \begin{frame}{Rappresentazione dei vincoli}
-class Constraint
 \begin{itemize}
-  \item[-] vars: Array[String]
-  \item[-] accepted: List[Array[String]]
-  \item[+] projection(variable: String): Set[String]
-  \item[+] reduction(variable: String, value: String): Constraint
+  \item class Constraint
+  \begin{itemize}
+    \item[-] vars: Array[String]
+    \item[-] accepted: List[Array[String]]
+    \item[+] projection(variable: String): Set[String]
+    \item[+] reduction(variable: String, value: String): Constraint
+  \end{itemize}
 \end{itemize}
 \end{frame}
 
@@ -61,14 +64,14 @@ c.reduction(Y,1) = Constraint(vars     =>  [X, Y, Z]
 \begin{frame}{Rappresentazione degli ordini - 2}
 Esempio
 
-\texttt{var A dependsON=\{B,C,D\}}  \texttt{dom=\{...\}}\\
-\texttt{var B dependsON=\{\}}       \texttt{dom=\{$b$,$\overline{b}$\}}\\
-\texttt{var C dependsON=\{\}}       \texttt{dom=\{$c$,$\overline{c}$\}}\\
-\texttt{var D dependsON=\{\}}       \texttt{dom=\{$d$,$\overline{d}$\}}\\
+\texttt{var A dependsOn=\{B,C,D\}}  \texttt{dom=\{...\}}\\
+\texttt{var B dependsOn=\{\}}       \texttt{dom=\{$b$,$\overline{b}$\}}\\
+\texttt{var C dependsOn=\{\}}       \texttt{dom=\{$c$,$\overline{c}$\}}\\
+\texttt{var D dependsOn=\{\}}       \texttt{dom=\{$d$,$\overline{d}$\}}\\
 \begin{center}
   \begin{figure}[ht]
     \centering
-    \includegraphics[width=0.5\textwidth]{grafo-ordini}
+    \includegraphics[width=0.5\textwidth]{images/grafo-ordini}
     \caption{\textit{Rappresentazione a grafo di A, B, C, D}}
   \end{figure}
 \end{center}
