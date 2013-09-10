@@ -1,0 +1,50 @@
+\documentclass[xcolor=dvipsnames]{beamer}
+
+\usepackage[italian]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{color}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{floatflt}
+\usepackage{float}
+\graphicspath{{images/}}
+\usepackage{eurosym}
+\usepackage{colortbl}
+\usepackage{color}
+\raggedbottom
+\usetheme[currentsubsection]{PaloAlto} 
+\usecolortheme{seahorse}
+\setbeamertemplate{footline}[frame number]
+\setbeamertemplate{items}[ball] 
+\setbeamertemplate{blocks}[rounded][shadow=true] 
+\title{CPNetSolver}
+%\subtitle{}
+\author{Francesco Burato, Simone Carriero}
+\institute[UNIPD]{
+  Dipartimento di Matematica\\
+  Università degli Studi di Padova\\[1ex]
+  %\texttt{lambdaset@gmail.com}
+}
+\date{12 Settembre 2013}
+\newcommand{\firstFrame}[1]{
+\begin{frame}
+  \begin{block}{Password Wallet}
+    \begin{center}
+    #1
+    \end{center}
+   \end{block}
+\end{frame}
+}
+\begin{document}
+
+%--- the titlepage frame -------------------------%
+\begin{frame}[plain]
+  \titlepage
+\end{frame}
+
+\input{introduzione}
+
+\input{progettazione}
+
+\end{document}

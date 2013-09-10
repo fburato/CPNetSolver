@@ -1,0 +1,52 @@
+\section{Introduzione}
+\begin{frame}{Introduzione}
+
+Cos'è CPNetSolver
+\begin{itemize}
+  \item risoluzione di CP-Net
+  \item visualizzazione grafo dell'ordine degli assegnamenti
+  \item accetta anche CP-Net cicliche
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Introduzione}
+
+Funzionamento:
+\begin{itemize}
+  \item accettazione CP-Net in input (DIRE:grammatica pross. slide)
+  \item conversione da CP-Net a CSP
+  \item calcolo e visualizzazione soluzioni ottime
+  \item generazione e visualizzazione grafo dell'ordine degli assegnamenti
+\end{itemize}
+
+Idea iniziale:
+\begin{itemize}
+  \item strumento didattico! (DIRE:in ciascun momento si può cambiare la CP-Net
+  corrente e vedere come cambiano le soluzioni e gli ordinamenti)
+  
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Introduzione}
+
+Grammatica
+\begin{itemize}
+\item
+\begin{verbatim}
+var X dependsOn={}
+dom={x,!x}
+:x>!x
+
+var Y dependsOn={}
+dom={y,!y}
+:y>!y
+
+var Z dependsOn={X,Y}
+dom={z,!z}
+x,y:z>!z
+x,!y:!z>z
+!x,y:!z>z
+!x,!y:!z>z
+\end{verbatim}
+\end{itemize}
+\end{frame}

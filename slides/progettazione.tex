@@ -1,0 +1,44 @@
+\section{Progettazione}
+\begin{frame}{Suddivisione architetturale}
+\begin{itemize}
+  \item package \texttt{constraintobj}
+  \item package \texttt{solver}
+  \item package \texttt{gui}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Rappresentazione dei domini}
+
+
+class Domain
+\begin{itemize}
+  \item[-] accepted: Set[String]
+  \item[+] contains(elem: String): Boolean
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Rappresentazione dei vincoli}
+Constraint
+\begin{itemize}
+  \item[-] vars: Array[String]
+  \item[-] accepted: List[Array[String]]
+  \item[+] projection(variable: String): Set[String]
+  \item[+] reduction(variable: String, value: String): Constraint
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Esempio di oggetto constraint}
+\begin{verbatim}
+c = Constraint(vars     =>  [X, Y, Z]
+               accepted => [[0, 0, 1],
+                            [0, 1, 1],
+                            [0, 1, 0]])
+                            
+c.projection(X) = [0]
+c.projection(Y) = [0, 1]
+
+c.reduction(Y,1) = Constraint(vars     =>  [X, Y, Z]
+                              accepted => [[0, 0, 1],
+                                           [0, 1, 0]])
+\end{verbatim}  
+\end{frame}
