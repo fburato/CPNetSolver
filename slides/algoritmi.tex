@@ -1,0 +1,57 @@
+\section{Algoritmi}
+\begin{frame}{Conversione CP-Net CSP}
+\begin{itemize}
+  \item \textbf{Utilizzo ordini} per ricostruire i vincoli
+  \item \textbf{Visita in profondità} dell'albero degli ordini per ottenere tutte le tuple
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Ricerca delle soluzioni}
+\begin{itemize}
+  \item Utilizzo \textbf{Backtracking+Forward Checking} per individuare tutte le soluzioni ottime
+  \begin{enumerate}
+  	\item \textbf{Inizializzazione domini e vincoli}
+  	\item \textbf{Ricerca in profondità}
+  	\begin{itemize}
+  		\item Se domini finiti $\Rightarrow$ soluzione trovata
+  	    \item Se prossimo dominio vuoto $\Rightarrow$ inconsistenza $\Rightarrow$ backtracking
+  	    \item Se prossimo dominio non vuoto $\Rightarrow$ prova tutti i valori e chiamata ricorsiva
+  	\end{itemize}
+  \end{enumerate}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Diagramma ordini assegnamenti - 1}
+\begin{itemize}
+  \item Astrazione chiave: \textbf{contatore variabile} (contatore \textit{n-dimensionale} ad insiemi quozienti diversi)
+  \item Esempio: contatore a ghiere modulo  (5, 7, 3) possibili configurazioni \{(4,6,2),(1,4,1)\}
+  \item Incremento contatore (4,4,2) $\Rightarrow$ (4,5,0)
+  \pause
+  \item \textbf{Calcolo flip peggiorativi}: configurazioni a distanza 1 \textit{strettamente maggiori}
+  \item Esempio: contatore (3,1,0) ha configurazioni a distanza 1 maggiori (3,1,1), (3,1,2), (3,2,0), (3,3,0), (3,4,0), (3,5,0), (3,6,0), (4,1,0)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Diagramma ordini assegnamenti - 2}
+\begin{enumerate}
+  \item \textbf{Inizializzazione:} stabilisci ordine arbitrario a domini e valori delle variabili, 
+  inizializza un contatore a 0
+  \item \textbf{Iterazione:} Finché il contatore non è al massimo
+  \begin{itemize}
+  	\item Calcola configurazioni a distanza 1 strettamente maggiori
+  	\item Per ogni configurazione determina la preferenza con un comparatore sulla variabile modificata
+  	\item Incrementa contatore
+  \end{itemize}
+\end{enumerate}
+\pause
+\begin{itemize}
+  \item \textbf{Complessità:}
+  \begin{itemize}
+  	\item Inizializzazione: $O(1)$
+  	\item Incremento contatore: $O(1)$ ammortizzato
+  	\item Numero iterazioni: $O(v) \Rightarrow $ incremento totale contatore $O(v)$  
+  	\item Numero totale configurazioni a distanza 1 strettamente maggiori: $O(e)$
+  \end{itemize}
+  \item \textbf{Totale} $O(1+v+e)=O(e+v)$
+\end{itemize}
+\end{frame}
