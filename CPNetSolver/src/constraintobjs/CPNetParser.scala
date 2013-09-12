@@ -148,7 +148,7 @@ object CPNetParser extends RegexParsers {
     }  
   }
     
-  private def literal = "[a-zA-Z!]*".r
+  private def literal = "[a-zA-Z0-9!]*".r
   
   private def values = repsep(literal, ",")
 
